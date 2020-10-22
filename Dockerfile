@@ -76,7 +76,7 @@ RUN mkdir -p /tmp/neovim && cd /tmp/neovim && \
 
 RUN useradd -m dev && echo "dev:dev" | chpasswd && \
   usermod -aG docker dev && \
-  usermod -aG sudo dev &&
+  usermod -aG sudo dev && \
   sed -i 's/^%sudo.*/%sudo   ALL=(ALL:ALL) NOPASSWD:ALL/g' /etc/sudoers
 
 USER dev
