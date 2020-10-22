@@ -43,16 +43,6 @@ RUN mkdir -p /tmp/cmake && cd /tmp/cmake && \
   make -j4 && make install && rm -rf /tmp/cmake
 
 # install latest clang && clangd
-# RUN mkdir -p /tools/llvm && cd /tools/llvm && \
-#   wget https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/llvm-11.0.0.src.tar.xz && \
-#   wget https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang-11.0.0.src.tar.xz && \
-#   wget https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang-tools-extra-11.0.0.src.tar.xz && \
-#   tar xf llvm-11.0.0.src.tar.xz && tar xf clang-11.0.0.src.tar.xz && tar xf clang-tools-extra-11.0.0.src.tar.xz && \
-#   rm *.tar.xz && \
-#   mv llvm-11.0.0.src/ llvm && mv clang-11.0.0.src llvm/tools/clang && \
-#   mv clang-tools-extra-11.0.0.src/ llvm/tools/clang/tools/extra && \
-#   mkdir -p /tools/llvm/build && cd /tools/llvm/build && \
-#   cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=Release ../llvm/ && make clangd -j4
 RUN mkdir -p /tools/llvm/ && cd /tools/llvm/ && \
   wget https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-16.04.tar.xz && \
   tar xf clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-16.04.tar.xz && \
@@ -84,8 +74,8 @@ WORKDIR /home/dev
 
 # install fisher
 RUN curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fisher.fish && \
-  fisher add laughedelic/pisces && \
-  fisher add oh-my-fish/theme-coffeeandcode
+  fish -c "fisher add laughedelic/pisces" && \
+  fish -c "fisher add oh-my-fish/theme-coffeeandcode"
 
 # install neovim plugins
 RUN cd /home/dev && git clone https://github.com/TwIStOy/dotvim.git
