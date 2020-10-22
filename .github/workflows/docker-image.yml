@@ -21,7 +21,9 @@ jobs:
         username: twistoywang
         password: ${{ secrets.PASSWORD }}
         image_name: twistoywang/develop-environment
-        image_tag: ${{ env.GITHUB_SHA_SHORT }},latest
+        image_tag: latest,commit-${{ env.GITHUB_SHA_SHORT }}
+        push_git_tag: true
+        stages_image_name: twistoywang/develop-environment-stage
 
     # - name: Setup QEMU
     #   uses: docker/setup-qemu-action@v1
