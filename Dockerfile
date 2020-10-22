@@ -78,4 +78,4 @@ RUN curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fishe
   fish -c "fisher add oh-my-fish/theme-coffeeandcode"
 
 # install neovim plugins
-# RUN cd /home/dev && git clone https://github.com/TwIStOy/dotvim.git
+RUN cd /home/dev && git clone https://github.com/TwIStOy/dotvim.git
