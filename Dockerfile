@@ -14,13 +14,13 @@ RUN apt update && apt install -y \
     unzip \
     libtool-bin \
     gettext \
-    wget
+    wget \
+    python3-pip \
+    libssl-dev \
+    openssl
 
 # install latest node && npm
 RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash - && apt install -y nodejs && npm install -g yarn
-
-# install openssl
-RUN apt install -y libssl-dev openssl
 
 # install latest cmake
 RUN mkdir -p /tmp/cmake && cd /tmp/cmake && \
@@ -38,16 +38,12 @@ RUN mkdir -p /tools/llvm && cd /tools/llvm && \
   tar xf llvm-11.0.0.src.tar.xz && tar xf clang-11.0.0.src.tar.xz && tar xf clang-tools-extra-11.0.0.src.tar.xz && \
   rm *.tar.xz && \
   mv llvm-11.0.0.src/ llvm && mv clang-11.0.0.src llvm/tools/clang && \
-  mv clang-tools-extra-11.0.0.src/ llvm/tools/clang/extra && \
+  mv clang-tools-extra-11.0.0.src/ llvm/tools/clang/tools/extra && \
   mkdir -p /tools/llvm/build && cd /tools/llvm/build && \
   cmake -G "Unix Makefiles" ../llvm/ && make clangd -j4
 
-# install python3-pip
-RUN apt install -y python3-pip
-
 # install neovim libraries
-RUN python3 -m pip install --no-cache-dir pynvim && \
-  npm install -g neovim
+RUN python3 -m pip install --no-cache-dir pynvim && npm install -g neovim
 
 # install latest neovim
 RUN mkdir -p /tmp/neovim && cd /tmp/neovim && \
