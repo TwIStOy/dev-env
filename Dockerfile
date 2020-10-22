@@ -40,7 +40,7 @@ RUN mkdir -p /tools/llvm && cd /tools/llvm && \
   mv llvm-11.0.0.src/ llvm && mv clang-11.0.0.src llvm/tools/clang && \
   mv clang-tools-extra-11.0.0.src/ llvm/tools/clang/tools/extra && \
   mkdir -p /tools/llvm/build && cd /tools/llvm/build && \
-  cmake -G "Unix Makefiles" ../llvm/ && make clangd -j4
+  cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=Release ../llvm/ && make clangd -j4
 
 # install neovim libraries
 RUN python3 -m pip install --no-cache-dir pynvim && npm install -g neovim
