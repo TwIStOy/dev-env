@@ -53,7 +53,7 @@ RUN mkdir -p /tmp/cmake && cd /tmp/cmake && \
 #   mv clang-tools-extra-11.0.0.src/ llvm/tools/clang/tools/extra && \
 #   mkdir -p /tools/llvm/build && cd /tools/llvm/build && \
 #   cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=Release ../llvm/ && make clangd -j4
-RUN mkdir -p /tools/llvm/ && cd /tools/llvm/ \
+RUN mkdir -p /tools/llvm/ && cd /tools/llvm/ && \
   wget https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-16.04.tar.xz && \
   tar xf clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-16.04.tar.xz && \
   rm *.tar.xz && mv clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-16.04/ llvm
