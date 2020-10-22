@@ -29,7 +29,7 @@ RUN apt update && apt install -y \
 # install docker inside container
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
   add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" && \
-  apt install docker-ce docker-ce-cli containerd.io
+  apt install -y docker-ce docker-ce-cli containerd.io
 
 # install latest node && npm
 RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash - && apt install -y nodejs && npm install -g yarn
