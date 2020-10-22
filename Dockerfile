@@ -19,11 +19,16 @@ RUN apt update && apt install -y \
 # install latest node && npm
 RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash - && apt install -y nodejs && npm install -g yarn
 
+# install openssl
+RUN apt install -y libssl-dev openssl
+
 # install latest cmake
 RUN mkdir -p /tmp/cmake && cd /tmp/cmake && \
   wget https://github.com/Kitware/CMake/releases/download/v3.19.0-rc1/cmake-3.19.0-rc1.tar.gz && \
   tar xf cmake-3.19.0-rc1.tar.gz && \
-  cd /tmp/cmake/cmake-3.19.0-rc1/ && ./bootstrap && make -j4 && make install && rm -rf /tmp/cmake
+  cd /tmp/cmake/cmake-3.19.0-rc1/ && \
+  ./bootstrap -- -DCMAKE_BUILD_TYPE:STRING=Release && \
+  make -j4 && make install && rm -rf /tmp/cmake
 
 # install latest clang && clangd
 RUN mkdir -p /tools/llvm && cd /tools/llvm && \
@@ -37,8 +42,29 @@ RUN mkdir -p /tools/llvm && cd /tools/llvm && \
   mkdir -p /tools/build && cd /tools/build && \
   cmake -G "Unix Makefiles" ../llvm && make clangd -j4
 
+# install python3-pip
+RUN apt install -y python3-pip
+
+# install neovim libraries
+RUN python3 -m pip install --no-cache-dir pynvim && \
+  npm install -g neovim
 
 # install latest neovim
+RUN mkdir -p /tmp/neovim && cd /tmp/neovim && \
+  wget https://github.com/neovim/neovim/archive/master.zip && unzip master.zip && \
+  cd neovim-master/ && make CMAKE_BUILD_TYPE=RelWithDebInfo -j4 &&
+  make install && rm -rf /tmp/neovim
 
 # install neovim plugins
+
+
+
+
+
+
+
+
+
+
+
 
