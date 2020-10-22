@@ -1,8 +1,11 @@
 FROM ubuntu:18.04
 MAINTAINER Hawtian Wang twistoy.wang@gmail.com
 
+ARG SHA_SHORT="short"
+
 # install dependencies
 RUN apt update && apt install -y \
+    sudo \
     gcc \
     g++ \
     git \
@@ -17,7 +20,16 @@ RUN apt update && apt install -y \
     wget \
     python3-pip \
     libssl-dev \
-    openssl
+    openssl \
+    software-properties-common \
+    apt-transport-https \
+    ca-certificates \
+    gnupg-agent
+
+# install docker inside container
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
+  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" && \
+  apt install docker-ce docker-ce-cli containerd.io
 
 # install latest node && npm
 RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash - && apt install -y nodejs && npm install -g yarn
@@ -31,19 +43,30 @@ RUN mkdir -p /tmp/cmake && cd /tmp/cmake && \
   make -j4 && make install && rm -rf /tmp/cmake
 
 # install latest clang && clangd
-RUN mkdir -p /tools/llvm && cd /tools/llvm && \
-  wget https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/llvm-11.0.0.src.tar.xz && \
-  wget https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang-11.0.0.src.tar.xz && \
-  wget https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang-tools-extra-11.0.0.src.tar.xz && \
-  tar xf llvm-11.0.0.src.tar.xz && tar xf clang-11.0.0.src.tar.xz && tar xf clang-tools-extra-11.0.0.src.tar.xz && \
-  rm *.tar.xz && \
-  mv llvm-11.0.0.src/ llvm && mv clang-11.0.0.src llvm/tools/clang && \
-  mv clang-tools-extra-11.0.0.src/ llvm/tools/clang/tools/extra && \
-  mkdir -p /tools/llvm/build && cd /tools/llvm/build && \
-  cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=Release ../llvm/ && make clangd -j4
+# RUN mkdir -p /tools/llvm && cd /tools/llvm && \
+#   wget https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/llvm-11.0.0.src.tar.xz && \
+#   wget https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang-11.0.0.src.tar.xz && \
+#   wget https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang-tools-extra-11.0.0.src.tar.xz && \
+#   tar xf llvm-11.0.0.src.tar.xz && tar xf clang-11.0.0.src.tar.xz && tar xf clang-tools-extra-11.0.0.src.tar.xz && \
+#   rm *.tar.xz && \
+#   mv llvm-11.0.0.src/ llvm && mv clang-11.0.0.src llvm/tools/clang && \
+#   mv clang-tools-extra-11.0.0.src/ llvm/tools/clang/tools/extra && \
+#   mkdir -p /tools/llvm/build && cd /tools/llvm/build && \
+#   cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=Release ../llvm/ && make clangd -j4
+RUN mkdir -p /tools/llvm/ && cd /tools/llvm/ \
+  wget https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-16.04.tar.xz && \
+  tar xf clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-16.04.tar.xz && \
+  rm *.tar.xz && mv clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-16.04/ llvm
+
+# install fish shell
+RUN apt-add-repository ppa:fish-shell/release-3 -y && \
+  apt update && apt install -y fish
 
 # install neovim libraries
 RUN python3 -m pip install --no-cache-dir pynvim && npm install -g neovim
+
+# FORCE REFRESH
+RUN echo "$SHA_SHORT" > /tmp/build_commit
 
 # install latest neovim
 RUN mkdir -p /tmp/neovim && cd /tmp/neovim && \
@@ -51,16 +74,18 @@ RUN mkdir -p /tmp/neovim && cd /tmp/neovim && \
   cd neovim-master/ && make CMAKE_BUILD_TYPE=RelWithDebInfo -j4 && \
   make install && rm -rf /tmp/neovim
 
+RUN useradd -m dev && echo "dev:dev" | chpasswd && \
+  usermod -aG docker dev && \
+  usermod -aG sudo dev &&
+  sed -i 's/^%sudo.*/%sudo   ALL=(ALL:ALL) NOPASSWD:ALL/g' /etc/sudoers
+
+USER dev
+WORKDIR /home/dev
+
+# install fisher
+RUN curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fisher.fish && \
+  fisher add laughedelic/pisces && \
+  fisher add oh-my-fish/theme-coffeeandcode
+
 # install neovim plugins
-
-
-
-
-
-
-
-
-
-
-
-
+RUN cd /home/dev && git clone https://github.com/TwIStOy/dotvim.git
