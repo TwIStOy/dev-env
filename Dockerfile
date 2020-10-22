@@ -39,8 +39,8 @@ RUN mkdir -p /tools/llvm && cd /tools/llvm && \
   rm *.tar.xz && \
   mv llvm-11.0.0.src/ llvm && mv clang-11.0.0.src llvm/tools/clang && \
   mv clang-tools-extra-11.0.0.src/ llvm/tools/clang/extra && \
-  mkdir -p /tools/build && cd /tools/build && \
-  cmake -G "Unix Makefiles" ../llvm && make clangd -j4
+  mkdir -p /tools/llvm/build && cd /tools/llvm/build && \
+  cmake -G "Unix Makefiles" ../llvm/ && make clangd -j4
 
 # install python3-pip
 RUN apt install -y python3-pip
@@ -52,7 +52,7 @@ RUN python3 -m pip install --no-cache-dir pynvim && \
 # install latest neovim
 RUN mkdir -p /tmp/neovim && cd /tmp/neovim && \
   wget https://github.com/neovim/neovim/archive/master.zip && unzip master.zip && \
-  cd neovim-master/ && make CMAKE_BUILD_TYPE=RelWithDebInfo -j4 &&
+  cd neovim-master/ && make CMAKE_BUILD_TYPE=RelWithDebInfo -j4 && \
   make install && rm -rf /tmp/neovim
 
 # install neovim plugins
