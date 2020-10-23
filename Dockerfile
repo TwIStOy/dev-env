@@ -94,7 +94,11 @@ RUN curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fishe
 COPY rust.expect /tmp/rust.expect
 RUN cd /tmp && \
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o /tmp/install_rust.sh && \
-  chmod +x /tmp/install_rust.sh && expect rust.expect
+  chmod +x /tmp/install_rust.sh && expect rust.expect && \
+  echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc && \
+  /home/.cargo/bin/rustup update
+
+# RUN /home/.cargo/bin/cargo install 
 
 COPY dotvim.toml /home/dev/.dotvim.toml
 COPY wakatime.cfg /home/dev/.wakatime.cfg
