@@ -98,8 +98,8 @@ RUN cd /tmp && \
   echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc && \
   /home/dev/.cargo/bin/rustup update && /home/dev/.cargo/bin/rustup default stable
 
-# RUN /home/.cargo/bin/cargo install 
-RUN /home/.cargo/bin/cargo install && \
+# RUN /home/dev/.cargo/bin/cargo install 
+RUN /home/dev/.cargo/bin/cargo install && \
   ripgrep skim zoxide fd-find bat exa fselect tree cargo-add bindgen
 
 COPY dotvim.toml /home/dev/.dotvim.toml
