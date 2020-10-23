@@ -77,5 +77,14 @@ RUN curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fishe
   fish -c "fisher add laughedelic/pisces" && \
   fish -c "fisher add oh-my-fish/theme-coffeeandcode"
 
+COPY dotvim.toml /home/dev/.dotvim.toml
+COPY wakatime.cfg /home/dev/.wakatime.cfg
+
 # install neovim plugins
-RUN cd /home/dev && git clone https://github.com/TwIStOy/dotvim.git
+RUN cd /home/dev && git clone https://github.com/TwIStOy/dotvim.git && \
+  mkdir -p /home/dev/.config/nvim/ && \
+  echo "set runtimepath+=$HOME/dotvim" > /home/dev/.config/nvim/init.vim && \
+  echo "call dotvim#bootstrap()" >> /home/dev/.config/nvim/init.vim
+  
+# install missing plugins
+#  RUN nvim +q

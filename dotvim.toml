@@ -1,0 +1,64 @@
+extra_plugins = [
+  'TwIStOy/conflict-resolve.nvim',
+]
+
+enabled_crates = [
+  'lang#lmake',
+  'tool#table',
+  'edit',
+  'textobject',
+  'tool#git',
+  'tool#easymotion',
+  'lang#rust',
+  'snippets',
+  'tool#wakatime',
+  'tool#term',
+  'tool#sudo',
+  'gui',
+]
+
+[global]
+minloglvl = 10
+enable_relativenumber_toggle = false
+
+[[crates]]
+name = 'better'
+enable_defx_icons = 1
+axring_rings = [
+  ['true', 'false'],
+  ['True', 'False'],
+  ['Debug', 'Info', 'Warn', 'Error', 'Fatal'],
+  ['first', 'second'],
+  ['uint8_t', 'uint16_t', 'uint32_t', 'uint64_t'],
+  ['htonl', 'ntohl'],
+  ['htons', 'ntohs'],
+  ['ASSERT_EQ', 'ASSERT_NE'],
+  ['EXPECT_EQ', 'EXPECT_NE'],
+]
+
+[[crates]]
+name = 'lsp#coc'
+coc_show_signature_help = false
+coc_cursorhold_highlight = false
+updatetime = 300
+coc_start_at_startup = true
+vista_enabled = false
+
+[[crates]]
+name = 'lang#cpp'
+clang_format_exe = '/home/s3101/clang/bin/clang-format'
+libclang_path = '/home/s3101/clang/lib'
+semantic_highlight = false
+standalone_semantic = false
+treesitter_highlight = true
+
+[[crates]]
+name = 'theme'
+theme = 'ci_dark'
+background = 'dark'
+
+[[crates]]
+name = 'lang#markdown'
+enable_preview = true
+math_enabled = true
+preview_auto_start = false
