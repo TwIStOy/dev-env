@@ -96,7 +96,7 @@ RUN cd /tmp && \
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o /tmp/install_rust.sh && \
   chmod +x /tmp/install_rust.sh && expect rust.expect && \
   echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc && \
-  /home/.cargo/bin/rustup update
+  /home/dev/.cargo/bin/rustup update
 
 # RUN /home/.cargo/bin/cargo install 
 
