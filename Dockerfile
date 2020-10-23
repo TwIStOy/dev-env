@@ -96,9 +96,11 @@ RUN cd /tmp && \
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o /tmp/install_rust.sh && \
   chmod +x /tmp/install_rust.sh && expect rust.expect && \
   echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc && \
-  /home/dev/.cargo/bin/rustup update
+  /home/dev/.cargo/bin/rustup update && /home/dev/.cargo/bin/rustup default stable
 
 # RUN /home/.cargo/bin/cargo install 
+RUN /home/.cargo/bin/cargo install && \
+  ripgrep skim zoxide fd-find bat exa fselect tree cargo-add bindgen
 
 COPY dotvim.toml /home/dev/.dotvim.toml
 COPY wakatime.cfg /home/dev/.wakatime.cfg
