@@ -99,7 +99,7 @@ RUN cd /tmp && \
   /home/dev/.cargo/bin/rustup update && /home/dev/.cargo/bin/rustup default stable
 
 # RUN /home/dev/.cargo/bin/cargo install 
-RUN /home/dev/.cargo/bin/cargo install && \
+RUN /home/dev/.cargo/bin/cargo install \
   ripgrep skim zoxide fd-find bat exa fselect tree cargo-add bindgen
 
 COPY dotvim.toml /home/dev/.dotvim.toml
