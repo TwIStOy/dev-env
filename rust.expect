@@ -1,0 +1,4 @@
+spawn "./install_rust.sh"
+expect "Proceed with installation"
+send "1\r"
+expect eof

@@ -55,6 +55,19 @@ RUN apt-add-repository ppa:fish-shell/release-3 -y && \
 # install neovim libraries
 RUN python3 -m pip install --no-cache-dir pynvim && npm install -g neovim
 
+# install other language servers
+RUN yarn global add diagnostic-languageserver && \
+  python3 -m pip install --no-cache-dir cpplint && \
+  mkdir -p /tools/cppcheck && cd /tools/cppcheck && \
+  wget https://github.com/danmar/cppcheck/archive/2.2.tar.gz && \
+  tar xf 2.2.tar.gz && rm 2.2.tar.gz && cd cppcheck-2.2 && \
+  make -j4
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+  apt install -y expect && \
+  dpkg-reconfigure --frontend noninteractive tzdata
+
 # FORCE REFRESH
 RUN echo "$SHA_SHORT" > /tmp/build_commit
 
@@ -77,14 +90,20 @@ RUN curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fishe
   fish -c "fisher add laughedelic/pisces" && \
   fish -c "fisher add oh-my-fish/theme-coffeeandcode"
 
+# install rust, cargo and other tools
+COPY rust.expect /tmp/rust.expect
+RUN cd /tmp && \
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o /tmp/install_rust.sh && \
+  expect rust.expect
+
 COPY dotvim.toml /home/dev/.dotvim.toml
 COPY wakatime.cfg /home/dev/.wakatime.cfg
 
 # install neovim plugins
-RUN cd /home/dev && git clone https://github.com/TwIStOy/dotvim.git && \
+RUN cd /home/dev && git clone https://github.com/TwIStOy/dotvim.git .dotvim && \
   mkdir -p /home/dev/.config/nvim/ && \
-  echo "set runtimepath+=$HOME/dotvim" > /home/dev/.config/nvim/init.vim && \
+  echo "set runtimepath+=$HOME/.dotvim" > /home/dev/.config/nvim/init.vim && \
   echo "call dotvim#bootstrap()" >> /home/dev/.config/nvim/init.vim
   
 # install missing plugins
-#  RUN nvim +q
+# RUN nvim +q
