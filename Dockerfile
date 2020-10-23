@@ -110,6 +110,9 @@ RUN cd /home/dev && git clone https://github.com/TwIStOy/dotvim.git .dotvim && \
   mkdir -p /home/dev/.config/nvim/ && \
   echo "set runtimepath+=$HOME/.dotvim" > /home/dev/.config/nvim/init.vim && \
   echo "call dotvim#bootstrap()" >> /home/dev/.config/nvim/init.vim
+
+# setup coc
+COPY coc-settings.json ~/.config/nvim/coc-settings.json
   
 # install missing plugins
-# RUN nvim +q
+RUN nvim "+CocInstall -sync coc-clangd" "+CocUpdateSync" "+q"
