@@ -68,15 +68,6 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
   apt install -y expect && \
   dpkg-reconfigure --frontend noninteractive tzdata
 
-# FORCE REFRESH
-COPY /tmp/git_commit /tmp/build_commit
-
-# install latest neovim
-RUN mkdir -p /tmp/neovim && cd /tmp/neovim && \
-  wget https://github.com/neovim/neovim/archive/master.zip && unzip master.zip && \
-  cd neovim-master/ && make CMAKE_BUILD_TYPE=RelWithDebInfo -j4 && \
-  make install && rm -rf /tmp/neovim
-
 RUN useradd -m dev && echo "dev:dev" | chpasswd && \
   usermod -aG docker dev && \
   usermod -aG sudo dev && \
@@ -104,6 +95,15 @@ RUN /home/dev/.cargo/bin/cargo install \
 
 COPY dotvim.toml /home/dev/.dotvim.toml
 COPY wakatime.cfg /home/dev/.wakatime.cfg
+
+# FORCE REFRESH
+COPY /tmp/git_commit /tmp/build_commit
+
+# install latest neovim
+RUN mkdir -p /tmp/neovim && cd /tmp/neovim && \
+  wget https://github.com/neovim/neovim/archive/master.zip && unzip master.zip && \
+  cd neovim-master/ && make CMAKE_BUILD_TYPE=RelWithDebInfo -j4 && \
+  sudo make install && rm -rf /tmp/neovim
 
 # install neovim plugins
 RUN cd /home/dev && git clone https://github.com/TwIStOy/dotvim.git .dotvim && \
