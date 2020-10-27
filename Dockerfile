@@ -69,7 +69,7 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
   dpkg-reconfigure --frontend noninteractive tzdata
 
 # FORCE REFRESH
-RUN echo "$SHA_SHORT" > /tmp/build_commit
+COPY /tmp/git_commit /tmp/build_commit
 
 # install latest neovim
 RUN mkdir -p /tmp/neovim && cd /tmp/neovim && \
@@ -119,7 +119,7 @@ RUN sudo apt install -y python3-dev python-dev && \
   mkdir -p ~/.cache/dein/repos/github.com/Yggdroot/ && cd ~/.cache/dein/repos/github.com/Yggdroot/ && \
   git clone https://github.com/Yggdroot/LeaderF.git && cd LeaderF && \
   ./install.sh
-  
+
 # install missing plugins
 RUN nvim -c ':qall'
-RUN nvim -c ":CocInstall -sync" -c ":CocInstall -sync coc-clangd" -c ":CocUpdateSync" -c ":qall"
+RUN nvim ":CocInstall -sync coc-clangd coc-fish coc-git coc-highlight coc-json coc-tabnine coc-template coc-tsserver coc-ultisnips coc-vimlsp|q"
