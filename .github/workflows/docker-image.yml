@@ -14,10 +14,7 @@ jobs:
     - name: Inject slug/short variables
       uses: rlespinasse/github-slug-action@v2.x
     - name: CreateFile
-      uses: finnp/create-file-action@1.0.0
-      with:
-        FILE_NAME: /tmp/git_commit
-        FILE_DATA: "${{ env.GITHUB_SHA_SHORT }}"
+      run: echo "${{ env.GITHUB_SHA_SHORT }}" > /tmp/git_commit
     - name: Build and push with cache
       uses: whoan/docker-build-with-cache-action@v5
       with:
