@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 MAINTAINER Hawtian Wang twistoy.wang@gmail.com
 
-ARG SHA_SHORT="short"
+ARG GITHUB_SHA_SHORT="short"
 
 # install dependencies
 RUN apt update && apt install -y \
@@ -97,7 +97,7 @@ COPY dotvim.toml /home/dev/.dotvim.toml
 COPY wakatime.cfg /home/dev/.wakatime.cfg
 
 # FORCE REFRESH
-RUN echo "$SHA_SHORT" /tmp/build_commit
+RUN echo "$GITHUB_SHA_SHORT" /tmp/build_commit
 
 # install latest neovim
 RUN mkdir -p /tmp/neovim && cd /tmp/neovim && \
