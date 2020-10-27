@@ -108,11 +108,18 @@ COPY wakatime.cfg /home/dev/.wakatime.cfg
 # install neovim plugins
 RUN cd /home/dev && git clone https://github.com/TwIStOy/dotvim.git .dotvim && \
   mkdir -p /home/dev/.config/nvim/ && \
-  echo "set runtimepath+=$HOME/.dotvim" > /home/dev/.config/nvim/init.vim && \
-  echo "call dotvim#bootstrap()" >> /home/dev/.config/nvim/init.vim
+  echo 'set runtimepath+=$HOME/.dotvim' > /home/dev/.config/nvim/init.vim && \
+  echo 'call dotvim#bootstrap()' >> /home/dev/.config/nvim/init.vim
 
 # setup coc
-COPY coc-settings.json ~/.config/nvim/coc-settings.json
+COPY coc-settings.json /home/dev/.config/nvim/coc-settings.json
+
+# special LeaderF
+RUN sudo apt install -y python3-dev python-dev && \
+  mkdir -p ~/.cache/dein/repos/github.com/Yggdroot/ && cd ~/.cache/dein/repos/github.com/Yggdroot/ && \
+  git clone https://github.com/Yggdroot/LeaderF.git && cd LeaderF && \
+  ./install.sh
   
 # install missing plugins
-RUN nvim "+CocInstall -sync coc-clangd" "+CocUpdateSync" "+q"
+RUN nvim -c ':qall'
+RUN nvim -c ":CocInstall -sync" -c ":CocInstall -sync coc-clangd" -c ":CocUpdateSync" -c ":qall"

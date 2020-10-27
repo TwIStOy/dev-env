@@ -46,8 +46,8 @@ vista_enabled = false
 
 [[crates]]
 name = 'lang#cpp'
-clang_format_exe = '/home/s3101/clang/bin/clang-format'
-libclang_path = '/home/s3101/clang/lib'
+clang_format_exe = '/tools/llvm/llvm/bin/clang-format'
+libclang_path = '/tools/llvm/llvm/lib'
 semantic_highlight = false
 standalone_semantic = false
 treesitter_highlight = true
