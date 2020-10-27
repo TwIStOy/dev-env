@@ -97,7 +97,7 @@ COPY dotvim.toml /home/dev/.dotvim.toml
 COPY wakatime.cfg /home/dev/.wakatime.cfg
 
 # FORCE REFRESH
-COPY /tmp/git_commit /tmp/build_commit
+RUN echo "$SHA_SHORT" /tmp/build_commit
 
 # install latest neovim
 RUN mkdir -p /tmp/neovim && cd /tmp/neovim && \
